@@ -19,12 +19,12 @@ const tasks = [
   {
     description: 'Hangout with friends',
     completed: true,
-    index: 1,
+    index: 3,
   },
   {
     description: 'Rest for 8 hours',
     completed: false,
-    index: 2,
+    index: 4,
   },
 ];
 
@@ -35,13 +35,14 @@ function showTasks() {
   items.classList.add('items');
   todoList.innerHTML = '';
   const taskTitle = document.createElement('p');
-  taskTitle.innerText = "Today's Tasks";
+  taskTitle.innerText = "Today's To Do";
   taskTitle.classList.add('taskTitle');
   todoList.appendChild(taskTitle);
   const addTask = document.createElement('input');
   addTask.setAttribute('placeholder', 'Add Task');
   addTask.classList.add('addTask');
   todoList.appendChild(addTask);
+
   const removeTask = document.createElement('button');
   removeTask.innerText = 'Clear Complete Tasks';
   removeTask.classList.add('removeTask');
@@ -50,6 +51,7 @@ function showTasks() {
     const listItem = document.createElement('label');
     const listInput = document.createElement('input');
     const x = document.createElement('BR');
+    const hr = document.createElement('HR');
     listInput.type = 'radio';
     listItem.classList.add('listItem');
     listItem.textContent = task.description;
@@ -59,6 +61,7 @@ function showTasks() {
     items.appendChild(listInput);
     items.appendChild(listItem);
     items.appendChild(x);
+    items.appendChild(hr);
     todoList.appendChild(items);
   });
 
