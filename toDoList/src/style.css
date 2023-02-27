@@ -1,10 +1,71 @@
 @import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400;500;600;700&display=swap');
 
+* {
+  font-family: 'Comfortaa', cursive;
+}
+
+.container {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 .title {
   color: blueviolet;
-  background: url('./icon.png');
-  background-repeat: no-repeat;
-  background-position: center;
-  height: 100vh;
-  font-family: 'Comfortaa', cursive;
+}
+
+#listContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  height: fit-content;
+  width: 80vw;
+  animation: myMove 10s infinite;
+  border-radius: 5px;
+  border: 2px solid whitesmoke;
+}
+
+@keyframes myMove {
+  40% {box-shadow: -1px 1px 10px 15px purple;}
+}
+
+.items {
+  padding: 0px;
+}
+
+label {
+  padding: 5px;
+}
+
+.listItem {
+  padding: 10px;
+  font-weight: 300;
+}
+
+.taskTitle {
+  padding: 0px 10px;
+  font-weight: 700;
+}
+
+.addTask {
+  margin: 5px;
+  width: 95%;
+  border: 1px solid white;
+}
+
+.removeTask {
+  width: 100%;
+  height: 33px;
+  border: 1px solid white;
+  border-radius: inherit;
+  text-align: center;
+}
+
+@media (min-width: 768px) {
+  #listContainer {
+    width: 500px;
+  }
 }

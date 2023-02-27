@@ -1,21 +1,69 @@
-import _ from 'lodash';
 import './style.css';
-import Icon from './icon.png';
 
-function component() {
-  const element = document.createElement('div');
+const tasks = [
+  {
+    description: 'Finish project',
+    completed: false,
+    index: 0,
+  },
+  {
+    description: 'Clean the house',
+    completed: true,
+    index: 1,
+  },
+  {
+    description: 'Take Walk',
+    completed: false,
+    index: 2,
+  },
+  {
+    description: 'Hangout with friends',
+    completed: true,
+    index: 1,
+  },
+  {
+    description: 'Rest for 8 hours',
+    completed: false,
+    index: 2,
+  },
+];
 
-  // Lodash, now imported by this script
-  element.innerHTML = _.join(['Hello', 'webpack'], ' ');
-  element.classList.add('title');
+// Function to iterate over tasks array and create HTML list items
+function showTasks() {
+  const todoList = document.getElementById('listContainer');
+  const items = document.createElement('ul');
+  items.classList.add('items');
+  todoList.innerHTML = '';
+  const taskTitle = document.createElement('p');
+  taskTitle.innerText = "Today's Tasks";
+  taskTitle.classList.add('taskTitle');
+  todoList.appendChild(taskTitle);
+  const addTask = document.createElement('input');
+  addTask.setAttribute('placeholder', 'Add Task');
+  addTask.classList.add('addTask');
+  todoList.appendChild(addTask);
+  const removeTask = document.createElement('button');
+  removeTask.innerText = 'Clear Complete Tasks';
+  removeTask.classList.add('removeTask');
 
-  // Add image to div
-  const myIcon = new Image();
-  myIcon.src = Icon;
+  tasks.forEach((task) => {
+    const listItem = document.createElement('label');
+    const listInput = document.createElement('input');
+    const x = document.createElement('BR');
+    listInput.type = 'radio';
+    listItem.classList.add('listItem');
+    listItem.textContent = task.description;
+    if (task.completed) {
+      listItem.classList.add('completed');
+    }
+    items.appendChild(listInput);
+    items.appendChild(listItem);
+    items.appendChild(x);
+    todoList.appendChild(items);
+  });
 
-  element.appendChild(myIcon);
-
-  return element;
+  todoList.appendChild(removeTask);
 }
 
-document.body.appendChild(component());
+// Call the showTasks function on page load
+window.addEventListener('load', showTasks);
