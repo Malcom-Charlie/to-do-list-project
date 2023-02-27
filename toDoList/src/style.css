@@ -21,7 +21,7 @@
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  height: fit-content;
+  height: 50vh;
   width: 80vw;
   animation: myMove 10s infinite;
   border-radius: 5px;
@@ -29,11 +29,11 @@
 }
 
 @keyframes myMove {
-  40% {box-shadow: -1px 1px 10px 15px purple;}
+  40% { box-shadow: -1px 1px 10px 15px purple; }
 }
 
 .items {
-  padding: 0px;
+  padding: 1px;
 }
 
 label {
@@ -46,7 +46,7 @@ label {
 }
 
 .taskTitle {
-  padding: 0px 10px;
+  padding-top: 10px;
   font-weight: 700;
 }
 
