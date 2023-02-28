@@ -1,7 +1,5 @@
-/* eslint-disable no-undef */
 const path = require('path');
-// eslint-disable-next-line no-undef
-HtmlWebpackPlugin = require('html-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
   mode: 'development',
