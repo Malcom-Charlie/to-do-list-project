@@ -2,9 +2,10 @@
 
 * {
   font-family: 'Comfortaa', cursive;
+  cursor: pointer;
 }
 
-.container {
+#container {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -17,55 +18,57 @@
   color: blueviolet;
 }
 
-#listContainer {
+#add-form {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  height: 50vh;
   width: 80vw;
   animation: myMove 10s infinite;
   border-radius: 5px;
   border: 2px solid whitesmoke;
+  list-style: none;
 }
 
 @keyframes myMove {
   40% { box-shadow: -1px 1px 10px 15px purple; }
 }
 
-.items {
-  padding: 1px;
-}
-
-label {
-  padding: 5px;
-}
-
-.listItem {
-  padding: 10px;
-  font-weight: 300;
-}
-
-.taskTitle {
-  padding-top: 10px;
-  font-weight: 700;
-}
-
-.addTask {
+#new-task {
   margin: 5px;
   width: 95%;
   border: 1px solid white;
 }
 
-.removeTask {
+.input-section {
+  display: flex;
+}
+
+hr {
   width: 100%;
-  height: 33px;
-  border: 1px solid white;
-  border-radius: inherit;
-  text-align: center;
+}
+
+#todo-list {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+#add-task {
+  background: white;
+  border: solid white;
+}
+
+.completed {
+  text-decoration: line-through;
+}
+
+#remove-completed {
+  border: solid white;
+  padding: 10px;
 }
 
 @media (min-width: 768px) {
-  #listContainer {
-    width: 500px;
+  #add-form {
+    width: 450px;
   }
 }

@@ -2,7 +2,7 @@
 <a id="readme-top"></a>
 
 <div align="center">
-  <img src="./toDoList/src/icon.png" alt="logo" width="140"  height="auto" />
+  <img src="./toDoList/src/assets/img/icon.png" alt="logo" width="140"  height="auto" />
   <br/>
 </div>
   

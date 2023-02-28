@@ -1,130 +1,92 @@
+/* eslint-disable no-use-before-define */
 import './style.css';
 
-const mavitu = [
-  {
-    description: 'Finish project',
-    completed: false,
-    index: 0,
-  },
-  {
-    description: 'Clean the house',
-    completed: true,
-    index: 1,
-  },
-  {
-    description: 'Take Walk',
-    completed: false,
-    index: 2,
-  },
-  {
-    description: 'Hangout with friends',
-    completed: true,
-    index: 3,
-  },
-  {
-    description: 'Rest for 8 hours',
-    completed: false,
-    index: 4,
-  },
-];
+const addForm = document.querySelector('#add-form');
+const todoList = document.querySelector('#todo-list');
+const removeCompletedBtn = document.querySelector('#remove-completed');
 
-// Get tasks from local storage or initialize an empty array
-let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+let tasks = [];
 
-// Get DOM elements
-const todoList = document.getElementById("todo-list");
-const addForm = document.getElementById("add-form");
-const taskInput = document.getElementById("task-input");
+// Function to add a new task to the array and render it
+const addTask = (taskDescription, completed = false) => {
+  tasks.push({ description: taskDescription, completed });
+  renderTasks();
+};
 
-// Function to render the to-do list
+// Function to toggle a task's completed status and render the updated list
+const toggleCompleted = (index) => {
+  tasks[index].completed = !tasks[index].completed;
+  renderTasks();
+  const selectedCheckboxes = todoList.querySelectorAll('input[type="checkbox"]:checked');
+  selectedCheckboxes.forEach((checkbox) => {
+    const taskItem = checkbox.parentNode;
+    const taskIndex = Array.from(todoList.children).indexOf(taskItem);
+    tasks[taskIndex].completed = true;
+    taskItem.classList.add('completed');
+    checkbox.setAttribute('checked', '');
+  });
+  const unselectedCheckboxes = todoList.querySelectorAll('input[type="checkbox"]:not(:checked)');
+  unselectedCheckboxes.forEach((checkbox) => {
+    const taskItem = checkbox.parentNode;
+    const taskIndex = Array.from(todoList.children).indexOf(taskItem);
+    tasks[taskIndex].completed = false;
+    taskItem.classList.remove('completed');
+    checkbox.removeAttribute('checked');
+  });
+};
+
+// Function to render the tasks in the todoList
 const renderTasks = () => {
-	todoList.innerHTML = "";
+  // Clear the todoList
+  todoList.innerHTML = '';
 
-	tasks.forEach((task, index) => {
-		const listItem = document.createElement("li");
-		listItem.dataset.index = index;
-		const checkbox = document.createElement("input");
-		checkbox.type = "checkbox";
-		checkbox.checked = task.completed;
-		checkbox.addEventListener("change", toggleTask);
-		const description = document.createElement("span");
-		description.textContent = task.description;
-		description.contentEditable = true;
-		description.addEventListener("blur", editTask);
-		const deleteButton = document.createElement("button");
-		deleteButton.textContent = "Delete";
-		deleteButton.addEventListener("click", deleteTask);
+  // Render each task
+  tasks.forEach((task, index) => {
+    const taskItem = document.createElement('li');
+    const hr = document.createElement('HR');
+    const taskCheckbox = document.createElement('input');
+    taskCheckbox.type = 'checkbox';
+    taskCheckbox.checked = task.completed;
+    taskCheckbox.addEventListener('change', () => toggleCompleted(index));
+    const taskDescription = document.createTextNode(task.description);
+    taskItem.appendChild(taskCheckbox);
+    taskItem.appendChild(taskDescription);
+    taskItem.appendChild(hr);
+    todoList.appendChild(taskItem);
+  });
 
-		listItem.appendChild(checkbox);
-		listItem.appendChild(description);
-		listItem.appendChild(deleteButton);
-		todoList.appendChild(listItem);
-	});
+  // Update the indexes of the tasks
+  tasks.forEach((task, index) => {
+    task.index = index;
+  });
+
+  // Save the tasks to local storage
+  localStorage.setItem('tasks', JSON.stringify(tasks));
 };
 
-// Function to add a new task
-const addTask = (event) => {
-	event.preventDefault();
-	const description = taskInput.value.trim();
-	if (description !== "") {
-		const index = tasks.length;
-		const task = {description, completed: false, index};
-		tasks.push(task);
-		taskInput.value = "";
-		renderTasks();
-		saveTasks();
-	}
+// Function to remove all completed tasks
+const removeCompletedTasks = () => {
+  tasks = tasks.filter((task) => !task.completed);
+  renderTasks();
 };
 
-// Function to delete a task
-const deleteTask = (event) => {
-	const listItem = event.target.parentNode;
-	const index = parseInt(listItem.dataset.index);
-	tasks.splice(index, 1);
-	renderTasks();
-	saveTasks();
-	updateIndexes();
-};
+// Add event listener to the addForm for submitting new tasks
+addForm.addEventListener('submit', (event) => {
+  event.preventDefault();
+  const newTaskInput = document.querySelector('#new-task');
+  const newTaskDescription = newTaskInput.value.trim();
+  if (newTaskDescription !== '') {
+    addTask(newTaskDescription);
+    newTaskInput.value = '';
+  }
+});
 
-// Function to toggle a task as completed
-const toggleTask = (event) => {
-	const checkbox = event.target;
-	const listItem = checkbox.parentNode;
-	const index = parseInt(listItem.dataset.index);
-	tasks[index].completed = checkbox.checked;
-	if (checkbox.checked) {
-		listItem.classList.add("completed");
-	} else {
-		listItem.classList.remove("completed");
-	}
-	saveTasks();
-};
+// Add event listener to the removeCompletedBtn to remove all completed tasks
+removeCompletedBtn.addEventListener('click', removeCompletedTasks);
 
-// Function to edit a task description
-const editTask = (event) => {
-	const description = event.target;
-	const listItem = description.parentNode;
-	const index = parseInt(listItem.dataset.index);
-	tasks[index].description = description.textContent.trim();
-	saveTasks();
-};
-
-// Function to update the indexes of all tasks after a task is deleted
-const updateIndexes = () => {
-	tasks.forEach((task, index) => {
-		task.index = index;
-	});
-	saveTasks();
-};
-
-// Function to save tasks to local storage
-const saveTasks = () => {
-	localStorage.setItem("tasks", JSON.stringify(tasks));
-};
-
-// Add event listeners
-addForm.addEventListener("submit", addTask);
-
-// Call the renderTasks function on page load
-renderTasks();
-
+// Load saved tasks from local storage
+const savedTasks = JSON.parse(localStorage.getItem('tasks'));
+if (savedTasks) {
+  tasks = savedTasks;
+  renderTasks();
+}
