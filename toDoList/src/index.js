@@ -52,7 +52,7 @@ function showTasks() {
     const listInput = document.createElement('input');
     const x = document.createElement('BR');
     const hr = document.createElement('HR');
-    listInput.type = 'radio';
+    listInput.type = 'checkbox';
     listItem.classList.add('listItem');
     listItem.textContent = task.description;
     if (task.completed) {
