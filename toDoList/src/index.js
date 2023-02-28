@@ -1,6 +1,6 @@
 import './style.css';
 
-const tasks = [
+const mavitu = [
   {
     description: 'Finish project',
     completed: false,
@@ -28,45 +28,103 @@ const tasks = [
   },
 ];
 
-// Function to iterate over tasks array and create HTML list items
-function showTasks() {
-  const todoList = document.getElementById('listContainer');
-  const items = document.createElement('ul');
-  items.classList.add('items');
-  todoList.innerHTML = '';
-  const taskTitle = document.createElement('p');
-  taskTitle.innerText = "Today's To Do";
-  taskTitle.classList.add('taskTitle');
-  todoList.appendChild(taskTitle);
-  const addTask = document.createElement('input');
-  addTask.setAttribute('placeholder', 'Add Task');
-  addTask.classList.add('addTask');
-  todoList.appendChild(addTask);
+// Get tasks from local storage or initialize an empty array
+let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
 
-  const removeTask = document.createElement('button');
-  removeTask.innerText = 'Clear Complete Tasks';
-  removeTask.classList.add('removeTask');
+// Get DOM elements
+const todoList = document.getElementById("todo-list");
+const addForm = document.getElementById("add-form");
+const taskInput = document.getElementById("task-input");
 
-  tasks.forEach((task) => {
-    const listItem = document.createElement('label');
-    const listInput = document.createElement('input');
-    const x = document.createElement('BR');
-    const hr = document.createElement('HR');
-    listInput.type = 'checkbox';
-    listItem.classList.add('listItem');
-    listItem.textContent = task.description;
-    if (task.completed) {
-      listItem.classList.add('completed');
-    }
-    items.appendChild(listInput);
-    items.appendChild(listItem);
-    items.appendChild(x);
-    items.appendChild(hr);
-    todoList.appendChild(items);
-  });
+// Function to render the to-do list
+const renderTasks = () => {
+	todoList.innerHTML = "";
 
-  todoList.appendChild(removeTask);
-}
+	tasks.forEach((task, index) => {
+		const listItem = document.createElement("li");
+		listItem.dataset.index = index;
+		const checkbox = document.createElement("input");
+		checkbox.type = "checkbox";
+		checkbox.checked = task.completed;
+		checkbox.addEventListener("change", toggleTask);
+		const description = document.createElement("span");
+		description.textContent = task.description;
+		description.contentEditable = true;
+		description.addEventListener("blur", editTask);
+		const deleteButton = document.createElement("button");
+		deleteButton.textContent = "Delete";
+		deleteButton.addEventListener("click", deleteTask);
 
-// Call the showTasks function on page load
-window.addEventListener('load', showTasks);
+		listItem.appendChild(checkbox);
+		listItem.appendChild(description);
+		listItem.appendChild(deleteButton);
+		todoList.appendChild(listItem);
+	});
+};
+
+// Function to add a new task
+const addTask = (event) => {
+	event.preventDefault();
+	const description = taskInput.value.trim();
+	if (description !== "") {
+		const index = tasks.length;
+		const task = {description, completed: false, index};
+		tasks.push(task);
+		taskInput.value = "";
+		renderTasks();
+		saveTasks();
+	}
+};
+
+// Function to delete a task
+const deleteTask = (event) => {
+	const listItem = event.target.parentNode;
+	const index = parseInt(listItem.dataset.index);
+	tasks.splice(index, 1);
+	renderTasks();
+	saveTasks();
+	updateIndexes();
+};
+
+// Function to toggle a task as completed
+const toggleTask = (event) => {
+	const checkbox = event.target;
+	const listItem = checkbox.parentNode;
+	const index = parseInt(listItem.dataset.index);
+	tasks[index].completed = checkbox.checked;
+	if (checkbox.checked) {
+		listItem.classList.add("completed");
+	} else {
+		listItem.classList.remove("completed");
+	}
+	saveTasks();
+};
+
+// Function to edit a task description
+const editTask = (event) => {
+	const description = event.target;
+	const listItem = description.parentNode;
+	const index = parseInt(listItem.dataset.index);
+	tasks[index].description = description.textContent.trim();
+	saveTasks();
+};
+
+// Function to update the indexes of all tasks after a task is deleted
+const updateIndexes = () => {
+	tasks.forEach((task, index) => {
+		task.index = index;
+	});
+	saveTasks();
+};
+
+// Function to save tasks to local storage
+const saveTasks = () => {
+	localStorage.setItem("tasks", JSON.stringify(tasks));
+};
+
+// Add event listeners
+addForm.addEventListener("submit", addTask);
+
+// Call the renderTasks function on page load
+renderTasks();
+
