@@ -5,13 +5,21 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>To Do List</title>
+
 <script defer src="runtime.bundle.js"></script><script defer src="index.bundle.js"></script></head>
 <body>
-  <section class="container">
-    <h1 class="title">To Do List</h1>
-    <div id="listContainer">
-
+  <section id="container">
+  <h1 class="title">To-Do List</h1>
+  <form id="add-form">
+    <div class="input-section">
+      <input type="text" id="new-task" placeholder="Add to your list...">
+      <button id="add-task"></button>
     </div>
-  </section>
+    <hr>
+    <ul id="todo-list"></ul>
+    <button id="remove-completed">Clear Completed Tasks</button>
+  </form>
+  <div class="currentTime"></div>
+
 </body>
 </html>

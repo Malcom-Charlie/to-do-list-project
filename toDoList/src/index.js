@@ -1,72 +1,38 @@
+/* eslint-disable no-use-before-define */
 import './style.css';
+import { DateTime } from './modules/luxon.js';
+import EditFunctions from './modules/newFunctionality.js';
 
-const tasks = [
-  {
-    description: 'Finish project',
-    completed: false,
-    index: 0,
-  },
-  {
-    description: 'Clean the house',
-    completed: true,
-    index: 1,
-  },
-  {
-    description: 'Take Walk',
-    completed: false,
-    index: 2,
-  },
-  {
-    description: 'Hangout with friends',
-    completed: true,
-    index: 3,
-  },
-  {
-    description: 'Rest for 8 hours',
-    completed: false,
-    index: 4,
-  },
-];
+const dateTimeNow = document.querySelector('.currentTime');
+setInterval(() => {
+  const current = DateTime.now().toLocaleString(DateTime.DATETIME_MED_WITH_WEEKDAY);
+  dateTimeNow.textContent = current;
+}, 1000);
 
-// Function to iterate over tasks array and create HTML list items
-function showTasks() {
-  const todoList = document.getElementById('listContainer');
-  const items = document.createElement('ul');
-  items.classList.add('items');
-  todoList.innerHTML = '';
-  const taskTitle = document.createElement('p');
-  taskTitle.innerText = "Today's To Do";
-  taskTitle.classList.add('taskTitle');
-  todoList.appendChild(taskTitle);
-  const addTask = document.createElement('input');
-  addTask.setAttribute('placeholder', 'Add Task');
-  addTask.classList.add('addTask');
-  todoList.appendChild(addTask);
+const addForm = document.querySelector('#add-form');
+const todoList = document.querySelector('#todo-list');
+const removeCompletedBtn = document.querySelector('#remove-completed');
 
-  const removeTask = document.createElement('button');
-  removeTask.innerText = 'Clear Complete Tasks';
-  removeTask.classList.add('removeTask');
+let tasks = [];
 
-  tasks.forEach((task) => {
-    const listItem = document.createElement('label');
-    const listInput = document.createElement('input');
-    const x = document.createElement('BR');
-    const hr = document.createElement('HR');
-    listInput.type = 'checkbox';
-    listItem.classList.add('listItem');
-    listItem.textContent = task.description;
-    if (task.completed) {
-      listItem.classList.add('completed');
-    }
-    items.appendChild(listInput);
-    items.appendChild(listItem);
-    items.appendChild(x);
-    items.appendChild(hr);
-    todoList.appendChild(items);
-  });
+const editFunctionality = new EditFunctions(tasks, todoList);
 
-  todoList.appendChild(removeTask);
+addForm.addEventListener('submit', (event) => {
+  event.preventDefault();
+  const newTaskInput = document.querySelector('#new-task');
+  const newTaskDescription = newTaskInput.value.trim();
+  if (newTaskDescription !== '') {
+    editFunctionality.addTask(newTaskDescription);
+    newTaskInput.value = '';
+  }
+});
+
+removeCompletedBtn.addEventListener('click', () => {
+  editFunctionality.removeCompletedTasks();
+});
+
+const savedTasks = JSON.parse(localStorage.getItem('tasks'));
+if (savedTasks) {
+  tasks = savedTasks;
+  editFunctionality.renderTasks();
 }
-
-// Call the showTasks function on page load
-window.addEventListener('load', showTasks);
