@@ -147,7 +147,9 @@ For complete and proper setup.
 
 ### Usage
 
-To run the project, open the index.html file that appeared after cloning.
+- To Add tasks click on the input section written add your task when done press enter
+- To Edit tasks already created double click on them and when done press enter 
+- To Remove task(s) click the checkbox a line will run through task text then click on the clear all done tasks button to remove
 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
