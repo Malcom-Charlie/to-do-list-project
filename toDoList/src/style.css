@@ -33,6 +33,12 @@
   40% { box-shadow: -1px 1px 10px 15px purple; }
 }
 
+#listTitle {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
 #new-task {
   margin: 5px;
   width: 95%;
