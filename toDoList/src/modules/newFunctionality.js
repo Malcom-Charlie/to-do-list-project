@@ -59,7 +59,12 @@ class EditFunctions {
       this.todoList.appendChild(taskItem);
     });
     this.tasks.forEach((task, index) => {
-      task.index = index;
+      const taskItem = this.todoList.children[index];
+      if (task.completed) {
+        taskItem.classList.add('completed');
+      } else {
+        taskItem.classList.remove('completed');
+      }
     });
     localStorage.setItem('tasks', JSON.stringify(this.tasks));
   }
